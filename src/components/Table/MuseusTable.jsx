@@ -4,7 +4,6 @@ import{Table, Column, Cell} from'fixed-data-table';
 import'../../../node_modules/fixed-data-table/dist/fixed-data-table.css';
 
 import MuseusDataListStore from'./MuseusDataListStore.jsx';
-
 export default class MuseusTable extends React.Component {
     constructor(props) {
         super(props);
@@ -46,12 +45,12 @@ export default class MuseusTable extends React.Component {
 
         for(let index = 0; index < size; index++) {
             let{name} = this._dataList.getObjectAt(index);
+            
             if(name.toLowerCase().indexOf(filterBy) !== -1) {
-                console.log('pushed!');
                 filteredIndexes.push(index);
             }
         }
-        console.log(filteredIndexes);
+        
         //seta o novo estado com o filtro aplicado
         this.setState({
             filteredDataList: new DataListWrapper(filteredIndexes, this._dataList)
@@ -71,7 +70,7 @@ export default class MuseusTable extends React.Component {
     render() {
         const columnWidths = this.state.columnWidths;
         let filteredDataList = this.state.filteredDatalist;
-
+        
         return(
             <div>
                 <input
@@ -87,7 +86,7 @@ export default class MuseusTable extends React.Component {
                     isColumnResizing={false}
                     width={1000}
                     height={500}
-                    {...this.props}>
+                >
                     <Column
                         header={<Cell>Museu</Cell>}
                         columnKey="name"
@@ -182,14 +181,6 @@ export default class MuseusTable extends React.Component {
                         cell={props => (
                             <Cell {...props}>
                                 {filteredDataList.getObjectAt(props.rowIndex)['esfera']}
-                            </Cell>
-                        )}
-                        width={200}/>
-                    <Column
-                        header={<Cell>Mus Owned</Cell>}
-                        cell={props => (
-                            <Cell {...props}>
-                                {filteredDataList.getObjectAt(props.rowIndex)['mus_owned']}
                             </Cell>
                         )}
                         width={200}/>

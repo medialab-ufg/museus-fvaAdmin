@@ -5,8 +5,8 @@ import ReactDOM from'react-dom';
 import MuseusTable from'./components/Table/MuseusTable.jsx';
 
 function fetchMuseus() {
-    const endpointURL = `http://museus.dev.saas.mapas.cultura.gov.br/api/space/find/?@select=name,emailPublico,En_Estado,En_Municipio,En_Bairro
-                        ,telefonePublico,endereco,num_sniic,esfera,mus_owned`;
+    const endpointURL = `http://museus.mapa.fdev/api/space/find/?@select=name,emailPublico,En_Estado,En_Municipio,En_Bairro
+                        ,telefonePublico,endereco,num_sniic,esfera&@files=(avatar,avatar.avatarMedium,avatar.avatarSmall)`;
                         
     fetch(endpointURL, {
         //mode: 'no-cors',
