@@ -3,9 +3,10 @@ import React from'react';
 import ReactDOM from'react-dom';
 //import BootstrapGrid from'./components/Bootstrap/BootstrapGrid.jsx';
 import MuseusTable from'./components/Table/MuseusTable.jsx';
+import AdminPanel from'./components/Semantic-UI/AdminPanel.jsx';
 
 function fetchMuseus() {
-    const endpointURL = `http://museus.mapa.fdev/api/space/find/?@select=name,emailPublico,En_Estado,En_Municipio,En_Bairro
+    const endpointURL = `http://museus.mapa.fdev/api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,En_Bairro
                         ,telefonePublico,endereco,num_sniic,esfera&@files=(avatar,avatar.avatarMedium,avatar.avatarSmall)`;
                         
     fetch(endpointURL, {
@@ -18,9 +19,12 @@ function fetchMuseus() {
         .then(response => {
             response.json()
                 .then(data => {
-                    ReactDOM.render(<MuseusTable museus={data}/>, document.getElementById('root'));
+                    console.log(data);
+                    ReactDOM.render(<AdminPanel museus={data} />, document.getElementById('root'));
                 });
         });
 }
 
 fetchMuseus();
+
+

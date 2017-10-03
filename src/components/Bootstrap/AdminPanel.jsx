@@ -1,8 +1,6 @@
 import React from'react';
 import{Col, Grid, Row} from'react-bootstrap/lib';
 
-import FixedDataTable from'../Table/FixedDataTable.jsx';
-
 export default class BootstrapGrid extends React.Component {
     render() {
         return(
@@ -23,7 +21,7 @@ export default class BootstrapGrid extends React.Component {
                 </Row>
 
                 <Row className="react-table">
-                    <Col xs={6} xsOffset={4}><FixedDataTable /></Col>
+                    <Col xs={6} xsOffset={4}></Col>
                 </Row>
             </Grid>
         );

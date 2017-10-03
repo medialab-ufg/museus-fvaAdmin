@@ -1,8 +1,9 @@
 /* eslint no-console: "off", no-debugger: "off", no-unused-vars: "off", react/prop-types:"off", no-undef: "off", react/jsx-no-undef: "off", react/no-direct-mutation-state: "off" */
 import React from'react';
-import{Table, Column, Cell} from'fixed-data-table';
-import'../../../node_modules/fixed-data-table/dist/fixed-data-table.css';
-
+import{Icon} from'semantic-ui-react';
+import{Table, Column, Cell} from'fixed-data-table-2';
+import'../../../node_modules/fixed-data-table-2/dist/fixed-data-table.css';
+//import{deleteFVA} from'./MuseusAPI.jsx';
 import MuseusDataListStore from'./MuseusDataListStore.jsx';
 export default class MuseusTable extends React.Component {
     constructor(props) {
@@ -57,6 +58,26 @@ export default class MuseusTable extends React.Component {
         });
     }
 
+    deleteFVA() {
+        const deleteURL = 'http://museus.mapa.fdev/space/68';
+        const data = {fva2017: null};
+
+        fetch(deleteURL, {
+            //mode: 'cors',
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'MapasSDK-REQUEST': true
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                response.json().then(data => {
+                    console.log(data);
+                });
+            });
+    }
+
     //Resize das colunas
     _onColumnResizeEndCallback(newColumnWidth, columnKey) {
         this.setState(({columnWidths}) => ({
@@ -69,7 +90,10 @@ export default class MuseusTable extends React.Component {
 
     render() {
         const columnWidths = this.state.columnWidths;
-        let filteredDataList = this.state.filteredDatalist;
+        const filteredDataList = this.state.filteredDatalist;
+        const okButton = <i className="green checkmark icon"></i>;
+        const deleteButton = <i className="red remove icon"></i>;
+        const delButton = <button onClick={this.deleteFVA}>delete</button>;
         
         return(
             <div>
@@ -99,6 +123,19 @@ export default class MuseusTable extends React.Component {
                         isResizable={true}
                         minWidth={200}
                         maxWidth={750}
+                    />
+                    <Column
+                        header={<Cell>Fva2017</Cell>}
+                        columnKey="fva2017"
+                        cell={props => (
+                            <Cell {...props}>
+                                {filteredDataList.getObjectAt(props.rowIndex)['fva2017'] === null ? okButton : delButton}
+                            </Cell>
+                        )}
+                        width={100}
+                        isResizable={true}
+                        minWidth={50}
+                        maxWidth={200}
                     />
                     <Column
                         header={<Cell>Estado</Cell>}
