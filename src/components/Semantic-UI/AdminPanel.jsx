@@ -1,9 +1,8 @@
-/* eslint no-console: "off", no-unused-vars: "off", no-debugger: "off", react/prop-types: "off" */
+/* eslint no-console: "off", no-unused-vars: "off", no-debugger: "off", react/prop-types: "off", react/no-deprecated: "off" */
 import React from'react';
 import'semantic-ui-css/semantic.min.css';
-import{ Container, Divider, Grid, Header, Menu, Message, Segment, Table } from'semantic-ui-react';
+import{ Container, Header, Menu, Segment, Table } from'semantic-ui-react';
 import MuseusTable from'../Table/MuseusTable.jsx';
-
 export default class AdminPanel extends React.Component {
     render() {
         return(
@@ -15,10 +14,12 @@ export default class AdminPanel extends React.Component {
                         <Menu.Item as='a'>Item</Menu.Item>
                         <Menu.Item as='a'>Item</Menu.Item>
                     </Menu>
-                    <Segment attached>1</Segment>
-                    <Table attached='bottom'>
+                    <Segment>
+                        
+                    </Segment>
+                    <Segment attached='bottom'>
                         <MuseusTable museus={this.props.museus} />
-                    </Table>
+                    </Segment>
                 </Container>
             </div>
         );

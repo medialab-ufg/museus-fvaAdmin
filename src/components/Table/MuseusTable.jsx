@@ -59,7 +59,7 @@ export default class MuseusTable extends React.Component {
     }
 
     deleteFVA() {
-        const deleteURL = 'http://museus.mapa.fdev/space/68';
+        const deleteURL = 'http://museus.mapa.fdev/painel/resetFva/';
         const data = {fva2017: null};
 
         fetch(deleteURL, {
@@ -67,7 +67,6 @@ export default class MuseusTable extends React.Component {
             method: 'PATCH',
             headers: {
                 'Accept': 'application/json',
-                'MapasSDK-REQUEST': true
             },
             body: JSON.stringify(data)
         })
@@ -108,7 +107,7 @@ export default class MuseusTable extends React.Component {
                     rowsCount={filteredDataList.getSize()}
                     onColumnResizeEndCallback={this._onColumnResizeEndCallback}
                     isColumnResizing={false}
-                    width={1000}
+                    width={1100}
                     height={500}
                 >
                     <Column
