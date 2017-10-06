@@ -19,7 +19,6 @@ function fetchMuseus() {
         .then(response => {
             response.json()
                 .then(data => {
-                    console.log(data);
                     ReactDOM.render(<AdminPanel museus={data} />, document.getElementById('root'));
                 });
         });

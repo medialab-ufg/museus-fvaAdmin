@@ -12,7 +12,7 @@ export default class MuseusDataListStore {
         }
 
         if(this._cache[index] === undefined) {
-            //console.log(this._museusList[index]);
+            console.log(this._museusList[index]);
             this._cache[index] = this._museusList[index];
         }
 
