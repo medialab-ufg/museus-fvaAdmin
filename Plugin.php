@@ -29,16 +29,12 @@ class Plugin extends \MapasCulturais\Plugin {
         });
 
         $app->hook('POST(panel.resetFVA)', function() use($app){
-            //$this->requireAuthentication();
-            if(!$app->user->is('admin') && !$app->user->is('staff')) {
-                echo json_encode(true); 
-            }
-            /* 
-            $id = json_decode(file_get_contents('php://input'));
-            $space = $app->repo('Space')->find($id->id);
-            $space->reopenFva = true;
-            $space->save(true); */
+            $this->requireAuthentication();
 
+            $id = json_decode(file_get_contents('php://input'));
+            $space = $app->repo('Space')->find($id);
+            $space->reopenFva = true;
+            $space->save(true);
         });
 
         $app->hook('GET(panel.fva-admin)', function() use ($app) {
