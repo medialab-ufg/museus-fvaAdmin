@@ -34,6 +34,7 @@ export default class MuseusTable extends React.Component {
         
         return(
             <ReactTable
+                className="-striped -highlight"
                 data={this.props.museus}
                 columns={columns}
                 filterable
