@@ -21,7 +21,6 @@ export default class DeleteButton extends React.PureComponent {
                 console.log('foi');
             }
         });
-        //console.log('deletado FVA do museu id: ' + this.state.museumId);
     }
 
     render() {

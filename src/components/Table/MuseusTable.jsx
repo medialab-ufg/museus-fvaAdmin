@@ -29,7 +29,13 @@ export default class MuseusTable extends React.Component {
         }, {
             Header: 'Email',
             filterable: false,
-            accessor: 'emailPublico'
+            accessor: 'emailPublico',
+            width: 100
+        }, {
+            Header: 'Telefone',
+            filterable: false,
+            accessor: 'telefonePublico',
+            width: 100
         }];
         
         return(

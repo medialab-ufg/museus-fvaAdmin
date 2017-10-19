@@ -1,17 +1,14 @@
 /* eslint no-console: "off", no-unused-vars: "off", no-debugger: "off", react/prop-types: "off" */
 import React from'react';
 import ReactDOM from'react-dom';
-//import BootstrapGrid from'./components/Bootstrap/BootstrapGrid.jsx';
 import MuseusTable from'./components/Table/MuseusTable.jsx';
 import AdminPanel from'./components/Semantic-UI/AdminPanel.jsx';
 import _ from'lodash';
 
 function fetchMuseus() {
-    const endpointURL = `http://museus.mapa.fdev/api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,En_Bairro
-                        ,telefonePublico,endereco,num_sniic,esfera&@files=(avatar,avatar.avatarMedium,avatar.avatarSmall)`;
-                        
+    const endpointURL = `http://museus.mapa.fdev/api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico`;
+    
     fetch(endpointURL, {
-        //mode: 'no-cors',
         method: 'GET',
         headers: {
             'Accept': 'application/json'
@@ -21,7 +18,8 @@ function fetchMuseus() {
             response.json()
                 .then(data => {
                     const respostas = countFvasRespondidos(data);
-                    ReactDOM.render(<AdminPanel museus={data} respostas={respostas} />, document.getElementById('root'));
+                    const percentualRespondido = calculatePercentual(data.length, respostas.respondidos);
+                    ReactDOM.render(<AdminPanel museus={data} respostas={respostas} percentual={percentualRespondido} />, document.getElementById('root'));
                 });
         });
 
@@ -31,7 +29,7 @@ function fetchMuseus() {
      * @return {OBJ}
      */
     function countFvasRespondidos(museusJson) {
-        let totalMuseus = museusJson.length;
+        const totalMuseus = museusJson.length;
         let respondidos = 0;
         let naoRespondidos = 0;
         
@@ -48,6 +46,30 @@ function fetchMuseus() {
         naoRespondidos = totalMuseus - respondidos;
         
         return{respondidos, naoRespondidos};
+    }
+
+    /**
+     * Contabiliza o percentual de museus que responderam o FVA
+     * @param {INT} totalMuseus
+     * @param {INT} totalMuseusResponderam 
+     * @return {INT} 
+     */
+    function calculatePercentual(totalMuseus, totalMuseusResponderam) {
+        const percentualRespondido = _.round(totalMuseusResponderam / totalMuseus * 100, 2);
+        let totalPercent = [];
+
+        //tratamento para os casos de 100%, 0% e os parcialmente respondidos
+        if(percentualRespondido === 100) {
+            totalPercent = [100, 0];
+        }
+        else if(percentualRespondido === 0) {
+            totalPercent = [0, 100];
+        }
+        else{
+            totalPercent = [100 - percentualRespondido, percentualRespondido];
+        }
+
+        return totalPercent;
     }
 }
 

@@ -32,9 +32,9 @@ class Plugin extends \MapasCulturais\Plugin {
             $this->requireAuthentication();
 
             $id = json_decode(file_get_contents('php://input'));
-            $space = $app->repo('Space')->find($id);
-            $space->reopenFva = true;
-            $space->save(true);
+            $spaceEntity = $app->repo('Space')->find($id);
+            $spaceFva = $spaceEntity->getMetadata('fva2017', true);
+            $spaceFva->delete(true);
         });
 
         $app->hook('GET(panel.fva-admin)', function() use ($app) {

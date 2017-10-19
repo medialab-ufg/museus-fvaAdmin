@@ -2,33 +2,39 @@
 import React from'react';
 import{Pie} from'react-chartjs-2';
 
-const data = {
-    labels: [
-        'Respondido',
-        'Não Respondido'
-    ],
-    datasets: [{
-        data: [300, 50],
-        backgroundColor: [
-            '#FF6384',
-            '#36A2EB'
-        ],
-        hoverBackgroundColor: [
-            '#FF6384',
-            '#36A2EB'
-        ]
-    }]
-};
+export default class PieChart extends React.PureComponent {
+    constructor(props) {
+        super(props);
 
-export default React.createClass({
-    displayName: 'PieExample',
-
+        this.state = {
+            percent: this.props.percentual
+        };
+    }
+    
     render() {
+        const data = {
+            labels: [
+                'Respondido',
+                'Não Respondido'
+            ],
+            datasets: [{
+                data: this.state.percent,
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB'
+                ],
+                hoverBackgroundColor: [
+                    '#FF6384',
+                    '#36A2EB'
+                ]
+            }]
+        };
+        
         return(
             <div>
-                <h2>Pie Example</h2>
+                <h4>% de Respostas</h4>
                 <Pie data={data} />
             </div>
         );
     }
-});
+}
