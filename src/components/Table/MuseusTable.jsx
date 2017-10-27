@@ -7,6 +7,7 @@ import DeleteButton from'./DeleteButton.jsx';
 export default class MuseusTable extends React.Component {
 
     render() {
+        const handler = this.props.parentHandler;
         const columns = [{
             Header: 'Museu',
             accessor: 'name',
@@ -15,7 +16,7 @@ export default class MuseusTable extends React.Component {
             Header: 'Respondido',
             filterable: false,
             accessor: 'fva2017',
-            Cell: props => <span className=''>{props.row.fva2017 !== null ? <DeleteButton museumId={props.original.id} />: 'não'}</span>,
+            Cell: props => <span className=''>{props.row.fva2017 !== null ? <DeleteButton museumId={props.original.id} parentHandler={handler}/>: 'não'}</span>,
             width: 100
         }, {
             Header: 'Cidade',

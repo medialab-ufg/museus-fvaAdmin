@@ -29,14 +29,16 @@ export default class Counter extends React.PureComponent {
             useGroup: true,
             animation: 'up',
         };
-        
+
         return(
             <div>
-                <h4 className="title">FVA Respondido</h4>
-                <div className="exam-div">
+                <h4 className="title">Relatório FVA</h4>
+                <div className="count-responderam">
+                    <p>Museus Responderam</p>
                     <AnimationCount {...countMuseusResponderam}/>
                 </div>
-                <div className="exam-div">
+                <div className="count-nao-responderam">
+                    <p>Museus Não Responderam</p>
                     <AnimationCount {...countMuseusNaoResponderam}/>
                 </div>
             </div>

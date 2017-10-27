@@ -8,7 +8,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 });
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.jsx',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'views/panel')
@@ -19,6 +19,10 @@ module.exports = {
         test: /\.jsx?$/, 
         loader: 'babel-loader', 
         exclude: /node_modules/,
+      },
+      { 
+        test: /\.css$/, 
+        loader: "style-loader!css-loader"
       }
     ],
     rules: [

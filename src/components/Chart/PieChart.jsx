@@ -10,6 +10,13 @@ export default class PieChart extends React.PureComponent {
             percent: this.props.percentual
         };
     }
+
+    componentWillUpdate(nextProps, nextState) {
+        console.log('chart update!');
+        console.log(nextProps);
+        console.log(nextState);
+
+    }
     
     render() {
         const data = {
@@ -29,11 +36,28 @@ export default class PieChart extends React.PureComponent {
                 ]
             }]
         };
+
+        const legend = {
+            position: 'bottom'
+        };
+
+        /* const options = {
+            tooltips: {
+                callbacks: {
+                    afterLabel: function(tooltipItems, data) {
+                        return '%';
+                    }
+                }
+            }
+        } */
         
         return(
             <div>
                 <h4>% de Respostas</h4>
-                <Pie data={data} />
+                <Pie 
+                    data={data}
+                    legend={legend}
+                />
             </div>
         );
     }

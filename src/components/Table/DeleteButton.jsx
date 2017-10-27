@@ -13,12 +13,14 @@ export default class DeleteButton extends React.PureComponent {
     }
 
     deleteClick(museuId) {
+        const self = this;
+
         $.ajax({
             url: MapasCulturais.createUrl('panel', 'resetFva'),
             type: 'POST',
             data: JSON.stringify(this.state.museumId),
             success: function(result) {
-                console.log('foi');
+                self.props.parentHandler();
             }
         });
     }
