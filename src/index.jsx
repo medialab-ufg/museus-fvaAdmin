@@ -10,7 +10,6 @@ class Index extends React.Component {
         super();
 
         this.state = {
-            hasChanges: false,
             museusData: null
         };
 
@@ -39,7 +38,6 @@ class Index extends React.Component {
                     .then(data => {
                         const qtdRespostas = countFvasRespondidos(data);
                         const percentualRespostas = calculatePercentual(data.length, qtdRespostas.respondidos);
-
                         this._qtdRespostas = qtdRespostas;
                         this._percentualRespostas = percentualRespostas;
                         this.setState({museusData: data});
@@ -89,7 +87,7 @@ class Index extends React.Component {
                 totalPercent = [0, 100];
             }
             else{
-                totalPercent = [100 - percentualRespondido, percentualRespondido];
+                totalPercent = [percentualRespondido, 100 - percentualRespondido];
             }
 
             return totalPercent;

@@ -1,6 +1,6 @@
 /* eslint no-console: "off", no-unused-vars: "off", no-debugger: "off", react/prop-types: "off", react/no-deprecated: "off" */
 import React from'react';
-import AnimationCount from'react-count-animation';
+import CountUp from'react-countup';
 
 export default class Counter extends React.PureComponent {
     constructor(props) {
@@ -11,35 +11,27 @@ export default class Counter extends React.PureComponent {
             naoRespondidos: this.props.respostas.naoRespondidos
         };
     }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.state.respondidos !== nextProps.respostas.respondidos && this.state.naoRespondidos !== nextProps.respostas.naoRespondidos) {
+            this.setState({
+                respondidos: nextProps.respostas.respondidos,
+                naoRespondidos: nextProps.respostas.naoRespondidos
+            });
+        }
+    }
     
     render() {
-        const countMuseusResponderam = {
-            start: 0,
-            count: this.state.respondidos,
-            duration: 1000,
-            decimals: 0,
-            useGroup: true,
-            animation: 'up',
-        };
-        const countMuseusNaoResponderam = {
-            start: 0,
-            count: this.state.naoRespondidos,
-            duration: 1000,
-            decimals: 0,
-            useGroup: true,
-            animation: 'up',
-        };
-
         return(
             <div>
                 <h4 className="title">Relatório FVA</h4>
                 <div className="count-responderam">
                     <p>Museus Responderam</p>
-                    <AnimationCount {...countMuseusResponderam}/>
+                    <CountUp start={0} end={this.state.respondidos} duration={2} />
                 </div>
                 <div className="count-nao-responderam">
                     <p>Museus Não Responderam</p>
-                    <AnimationCount {...countMuseusNaoResponderam}/>
+                    <CountUp start={0} end={this.state.naoRespondidos} duration={2} />
                 </div>
             </div>
         );

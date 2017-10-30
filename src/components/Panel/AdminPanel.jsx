@@ -10,7 +10,7 @@ export default class AdminPanel extends React.Component {
         return(
             <div id="panel-container">
                 <div id="counter-container">
-                    {/* <Counter respostas={this.props.respostas} /> */}
+                    <Counter respostas={this.props.respostas} />
                 </div>
                 <div id="chart-container">
                     <PieChart percentual={this.props.percentual} />

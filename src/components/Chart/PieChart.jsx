@@ -11,11 +11,10 @@ export default class PieChart extends React.PureComponent {
         };
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        console.log('chart update!');
-        console.log(nextProps);
-        console.log(nextState);
-
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.percentual !== this.state.percent) {
+            this.setState({percent: nextProps.percentual});
+        }
     }
     
     render() {
