@@ -27,7 +27,7 @@ export default class DeleteButton extends React.PureComponent {
 
     render() {
         return(
-            <button onClick={this.deleteClick}>Reabrir</button>
+            <button className="btn-reopen" onClick={this.deleteClick}>Reabrir</button>
         );
     }
 }

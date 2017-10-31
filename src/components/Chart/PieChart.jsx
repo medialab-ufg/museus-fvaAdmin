@@ -40,24 +40,22 @@ export default class PieChart extends React.PureComponent {
             position: 'bottom'
         };
 
-        /* const options = {
+        const options = {
             tooltips: {
                 callbacks: {
                     afterLabel: function(tooltipItems, data) {
-                        return '%';
+                        return'%';
                     }
                 }
             }
-        } */
+        };
         
         return(
-            <div>
-                <h4>% de Respostas</h4>
-                <Pie 
-                    data={data}
-                    legend={legend}
-                />
-            </div>
+            <Pie 
+                data={data}
+                legend={legend}
+                options={options}
+            />
         );
     }
 }

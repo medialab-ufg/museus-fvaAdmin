@@ -23,15 +23,14 @@ export default class Counter extends React.PureComponent {
     
     render() {
         return(
-            <div>
-                <h4 className="title">Relatório FVA</h4>
+            <div className="header-count">
                 <div className="count-responderam">
                     <p>Museus Responderam</p>
-                    <CountUp start={0} end={this.state.respondidos} duration={2} />
+                    <div className="count-number"><CountUp start={0} end={this.state.respondidos} duration={2} /></div>
                 </div>
                 <div className="count-nao-responderam">
                     <p>Museus Não Responderam</p>
-                    <CountUp start={0} end={this.state.naoRespondidos} duration={2} />
+                    <div className="count-number"><CountUp start={0} end={this.state.naoRespondidos} duration={2} /></div>
                 </div>
             </div>
         );

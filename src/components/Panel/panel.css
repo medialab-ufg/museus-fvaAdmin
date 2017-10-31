@@ -1,0 +1,78 @@
+#chart-container {
+    margin-bottom: 50px;
+}
+.count-nao-responderam {
+    float: right;
+}
+.count-responderam{
+    float: left;
+}
+.teste {
+    position: relative;
+}
+
+.count-responderam .count-number,
+.count-nao-responderam .count-number {
+    text-align: center;
+    font-weight: bold;
+    font-size: 34px;
+}
+
+.count-nao-responderam p,
+.count-responderam p {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.fva-table {
+    font-size: 12px;
+    line-height: 10px;
+}
+
+.rt-resizable-header-content {
+    font-weight: bold;
+}
+
+.-pagination .-previous,
+.-pagination .-next, {
+    flex: none;
+    width: 20%;
+}
+
+.-pagination .-center {
+    width: 60%;
+    flex: none;
+} 
+
+
+.ReactTable .-pagination .-pageJump input {
+    width: 40px;
+    padding: 0;
+}
+
+.ReactTable .-pagination input, .ReactTable .-pagination select {
+    margin: 0;
+    height: 25px;
+    padding: 0;
+}
+
+.header-count {
+    padding-bottom: 100px;
+}
+
+.btn-reopen {
+    font-size: 12px;
+    padding: 0 10px;
+    margin: 0;
+    background: #DDD;
+    border: 1px solid #666;
+    color: #000;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.input-filter {
+    width: 100%;
+}

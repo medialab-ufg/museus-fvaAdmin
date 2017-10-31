@@ -3,7 +3,7 @@ import React from'react';
 import MuseusTable from'../Table/MuseusTable.jsx';
 import Counter from'../Counter/Counter.jsx';
 import PieChart from'../Chart/PieChart.jsx';
-import'./index.css';
+import'./panel.css';
 
 export default class AdminPanel extends React.Component {
     render() {

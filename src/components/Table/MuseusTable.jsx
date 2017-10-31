@@ -8,10 +8,19 @@ export default class MuseusTable extends React.Component {
 
     render() {
         const handler = this.props.parentHandler;
+        const filter = (filter, row) => row.name.toLowerCase().indexOf(filter.value.toLowerCase()) !== -1;
+
         const columns = [{
             Header: 'Museu',
             accessor: 'name',
-            width: 350
+            width: 350,
+            filterMethod: filter,
+            Filter: ({filter, onChange}) =>
+                <input
+                    type="text"
+                    placeholder="Pesquise por Nome do Museu"
+                    style={{ width: '100%' }}
+                />
         }, {
             Header: 'Respondido',
             filterable: false,
@@ -20,13 +29,14 @@ export default class MuseusTable extends React.Component {
             width: 100
         }, {
             Header: 'Cidade',
+            accessor: 'En_Municipio',
             filterable: false,
-            accessor: 'En_Municipio'
         }, {
-            Header: 'Estado',
+            Header: 'UF',
             filterable: false,
             accessor: 'En_Estado',
-            width: 100
+            width: 50
+
         }, {
             Header: 'Email',
             filterable: false,
@@ -41,12 +51,17 @@ export default class MuseusTable extends React.Component {
         
         return(
             <ReactTable
-                className="-striped -highlight"
+                className="-striped -highlight fva-table"
                 data={this.props.museus}
                 columns={columns}
                 filterable
-                defaultFilterMethod={(filter, row) => row.name.toLowerCase().indexOf(filter.value.toLowerCase()) !== -1}
                 defaultPageSize={10}
+                previousText='Anterior'
+                nextText='Próximo'
+                pageText='Página'
+                ofText='de'
+                rowsText='linhas'
+                noDataText='Registros Não Encontrados'
             />
         );
     }

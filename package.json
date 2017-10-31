@@ -12,7 +12,6 @@
     "react-countup": "^2.3.0",
     "react-dom": "^15.6.2",
     "react-table": "^6.6.0",
-    "react-tooltip": "^3.3.1",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.74.2"
   },
@@ -39,6 +38,6 @@
     "build": "webpack",
     "start": "webpack-dev-server"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Ari Mourão <amlima@gmail.com>",
+  "license": "GPL3"
 }

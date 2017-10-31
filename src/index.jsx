@@ -21,7 +21,7 @@ class Index extends React.Component {
     }
 
     componentWillMount() {
-        this.fetchMuseus();
+        this.updateState();
     }
 
     fetchMuseus() {
