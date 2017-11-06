@@ -9,11 +9,10 @@
     "path": "^0.12.7",
     "react": "^15.6.2",
     "react-chartjs-2": "^2.6.4",
+    "react-confirm-alert": "^1.0.8",
     "react-countup": "^2.3.0",
     "react-dom": "^15.6.2",
-    "react-table": "^6.6.0",
-    "semantic-ui-css": "^2.2.12",
-    "semantic-ui-react": "^0.74.2"
+    "react-table": "^6.6.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",

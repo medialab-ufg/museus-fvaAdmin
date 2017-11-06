@@ -28,6 +28,7 @@ class Plugin extends \MapasCulturais\Plugin {
             
         });
 
+        //Apaga o FVA do museu do id fornecido
         $app->hook('POST(panel.resetFVA)', function() use($app){
             $this->requireAuthentication();
 
@@ -37,20 +38,32 @@ class Plugin extends \MapasCulturais\Plugin {
             $spaceFva->delete(true);
         });
 
+        //Hook que carrega o HTML gerado pelo build do ReactJS
         $app->hook('GET(panel.fva-admin)', function() use ($app) {
             $this->requireAuthentication();
+            
             if(!$app->user->is('admin') && !$app->user->is('staff')){
                 $app->pass();
             }
 
             $this->render('fva-admin');
         });
+
+        //Hook que lista os museus cadastrados na base
+        $app->hook('GET(panel.list-museus)', function() use($app) {
+            $qb = $app->em->createQueryBuilder();
+            
+            $list = $qb->select('name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico')
+                       ->from('Space')
+                       ->orderBy('name', 'ASC')
+                       ->getQuery()
+                       ->getResult();
+
+            echo json_encode($list);
+        });
     }
 
     public function register() {
-        //Flag que controla se o questionário FVA deve ser reaberto
-        $this->registerSpaceMetadata('reopenFva', array(
-            'label' => 'reopenFva'
-        ));
+        
     }
 }

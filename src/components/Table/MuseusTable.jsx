@@ -20,12 +20,13 @@ export default class MuseusTable extends React.Component {
                     type="text"
                     placeholder="Pesquise por Nome do Museu"
                     style={{ width: '100%' }}
+                    onChange={event => onChange(event.target.value)}
                 />
         }, {
             Header: 'Respondido',
             filterable: false,
             accessor: 'fva2017',
-            Cell: props => <span className=''>{props.row.fva2017 !== null ? <DeleteButton museumId={props.original.id} parentHandler={handler}/>: 'não'}</span>,
+            Cell: props => <span>{props.row.fva2017 !== null ? <DeleteButton museumId={props.original.id} parentHandler={handler}/>: 'não'}</span>,
             width: 100
         }, {
             Header: 'Cidade',
