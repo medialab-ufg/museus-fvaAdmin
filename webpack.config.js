@@ -1,5 +1,5 @@
 const path = require('path');
-
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/index.html',
@@ -52,5 +52,8 @@ module.exports = {
     ],
   },
   devtool: 'inline-source-map',
-  plugins: [HtmlWebpackPluginConfig]
+  plugins: [
+    HtmlWebpackPluginConfig,
+    new UglifyJSPlugin()
+  ]
 };
