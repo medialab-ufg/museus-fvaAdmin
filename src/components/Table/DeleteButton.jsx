@@ -16,7 +16,6 @@ export default class DeleteButton extends React.PureComponent {
     }
 
     deleteClick(museuId) {
-        console.log('chamou ?');
         const self = this;
 
         $.ajax({

@@ -26,6 +26,13 @@ export default class MuseusTable extends React.Component {
             Header: 'Respondido',
             filterable: false,
             accessor: 'fva2017',
+            getProps: () => {
+                return{
+                    style: {
+                        'text-align': 'center'
+                    }
+                };
+            },
             Cell: props => <span>{props.row.fva2017 !== null ? <DeleteButton museumId={props.original.id} parentHandler={handler}/>: 'não'}</span>,
             width: 100
         }, {
@@ -36,13 +43,20 @@ export default class MuseusTable extends React.Component {
             Header: 'UF',
             filterable: false,
             accessor: 'En_Estado',
+            getProps: () => {
+                return{
+                    style: {
+                        'text-align': 'center'
+                    }
+                };
+            },
             width: 50
 
         }, {
             Header: 'Email',
             filterable: false,
             accessor: 'emailPublico',
-            width: 100
+            width: 200
         }, {
             Header: 'Telefone',
             filterable: false,
