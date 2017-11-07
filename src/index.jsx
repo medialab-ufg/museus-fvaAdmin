@@ -1,7 +1,6 @@
 /* eslint no-console: "off", no-debugger: "off", no-unused-vars: "off", react/prop-types:"off", no-undef: "off", react/jsx-no-undef: "off", react/no-direct-mutation-state: "off" */
 import React from'react';
 import ReactDOM from'react-dom';
-import MuseusTable from'./components/Table/MuseusTable.jsx';
 import AdminPanel from'./components/Panel/AdminPanel.jsx';
 import _ from'lodash';
 

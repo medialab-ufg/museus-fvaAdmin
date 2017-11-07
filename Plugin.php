@@ -17,9 +17,8 @@ class Plugin extends \MapasCulturais\Plugin {
             if(!$app->user->is('admin') && !$app->user->is('staff'))
             return;
 
-            $a_class = $this->template == 'panel/fva-admin' ? 'active' : '';
             $url = $app->createUrl('panel', 'fva-admin');
-            echo "<li><a class='$a_class' href='$url'><span class='icon icon-em-cartaz'></span>FVA</a></li>";
+            echo "<li><a href='$url'><span class='icon icon-em-cartaz'></span>FVA</a></li>";
         });
 
         //Registra o js do painel admin

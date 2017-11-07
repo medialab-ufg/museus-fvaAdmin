@@ -8,13 +8,14 @@ export default class MuseusTable extends React.Component {
 
     render() {
         const handler = this.props.parentHandler;
-        const filter = (filter, row) => row.name.toLowerCase().indexOf(filter.value.toLowerCase()) !== -1;
+        const filterMuseu = (filter, row) => row.name.toLowerCase().indexOf(filter.value.toLowerCase()) !== -1;
+        const filterMunicipio = (filter, row) => row.En_Municipio === null ? false : row.En_Municipio.toLowerCase().indexOf(filter.value.toLowerCase()) !== -1;
 
         const columns = [{
             Header: 'Museu',
             accessor: 'name',
             width: 350,
-            filterMethod: filter,
+            filterMethod: filterMuseu,
             Filter: ({filter, onChange}) =>
                 <input
                     type="text"
@@ -29,7 +30,7 @@ export default class MuseusTable extends React.Component {
             getProps: () => {
                 return{
                     style: {
-                        'text-align': 'center'
+                        textAlign: 'center'
                     }
                 };
             },
@@ -38,7 +39,16 @@ export default class MuseusTable extends React.Component {
         }, {
             Header: 'Cidade',
             accessor: 'En_Municipio',
-            filterable: false,
+            width: 200,
+            filterMethod: filterMunicipio,
+            Filter: ({filter, onChange}) =>
+                <input
+                    type="text"
+                    placeholder="Pesquise por Cidade"
+                    style={{ width: '100%' }}
+                    onChange={event => onChange(event.target.value)}
+                />
+            
         }, {
             Header: 'UF',
             filterable: false,
@@ -46,7 +56,7 @@ export default class MuseusTable extends React.Component {
             getProps: () => {
                 return{
                     style: {
-                        'text-align': 'center'
+                        textAlign: 'center'
                     }
                 };
             },
