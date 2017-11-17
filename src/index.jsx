@@ -24,9 +24,9 @@ class Index extends React.Component {
     }
 
     fetchMuseus() {
-        const endpointURL = 'http://museus.mapa.fdev/api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico';
-
-        fetch(endpointURL, {
+        //const endpointURL = 'http://museus.mapa.fdev/api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico';
+        const devEndpointURL= 'http://museus.dev.saas.mapas.cultura.gov.br/api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico';
+        fetch(devEndpointURL, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
