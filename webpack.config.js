@@ -13,6 +13,16 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'views/panel')
   },
+  plugins: {
+    uglify: {
+      mangle: false,
+      compress: {
+        global_defs: {
+          DEBUG: false
+        }
+      }
+    }
+  },
   module: {
     loaders: [
       { 

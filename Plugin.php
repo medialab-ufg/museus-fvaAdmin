@@ -2,6 +2,7 @@
 namespace FvaAdmin;
 
 use MapasCulturais\app;
+use MapasCulturais\ApiQuery;
 use MapasCulturais\Entities;
 
 class Plugin extends \MapasCulturais\Plugin {
@@ -23,8 +24,11 @@ class Plugin extends \MapasCulturais\Plugin {
 
         //Registra o js do painel admin
         $app->hook('mapasculturais.head', function() use($app){
-            $app->view->enqueueScript('app', 'bundle', '../views/panel/bundle.js');
+            $controllerAtual = $app->view->getController();
             
+            if(property_exists($controllerAtual, 'action') && $controllerAtual->action === 'fva-admin') {
+                $app->view->enqueueScript('app', 'bundle', '../views/panel/bundle.js');
+            }
         });
 
         //Apaga o FVA do museu do id fornecido
@@ -44,21 +48,16 @@ class Plugin extends \MapasCulturais\Plugin {
             if(!$app->user->is('admin') && !$app->user->is('staff')){
                 $app->pass();
             }
-
+            
             $this->render('fva-admin');
         });
 
         //Hook que lista os museus cadastrados na base
         $app->hook('GET(panel.list-museus)', function() use($app) {
-            $qb = $app->em->createQueryBuilder();
-            
-            $list = $qb->select('name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico')
-                       ->from('Space')
-                       ->orderBy('name', 'ASC')
-                       ->getQuery()
-                       ->getResult();
+            $query = new \MapasCulturais\ApiQuery('MapasCulturais\Entities\Space', ['@select' => 'name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico', '@order'=> 'name ASC']);
+            $spaces = $query->find();
 
-            echo json_encode($list);
+            echo json_encode($spaces);
         });
     }
 
