@@ -51,14 +51,6 @@ class Plugin extends \MapasCulturais\Plugin {
             
             $this->render('fva-admin');
         });
-
-        //Hook que lista os museus cadastrados na base
-        $app->hook('GET(panel.list-museus)', function() use($app) {
-            $query = new \MapasCulturais\ApiQuery('MapasCulturais\Entities\Space', ['@select' => 'name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico', '@order'=> 'name ASC']);
-            $spaces = $query->find();
-
-            echo json_encode($spaces);
-        });
     }
 
     public function register() {
