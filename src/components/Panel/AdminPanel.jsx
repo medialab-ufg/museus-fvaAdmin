@@ -18,6 +18,9 @@ export default class AdminPanel extends React.Component {
                 <div id="table-container">
                     <MuseusTable museus={this.props.museus} parentHandler= {this.props.parentHandler} />
                 </div>
+                <div id="generate-xls">
+                    <button onClick={this.props.generateXls}>Gerar Relatório</button>
+                </div>
             </div>
         );
     }

@@ -97,10 +97,31 @@ class Index extends React.Component {
         this.fetchMuseus();
     }
 
+    generateXls() {
+        $.ajax({
+            url: MapasCulturais.createUrl('panel', 'generate-xls'),
+            type: 'POST',
+            data: {},
+            dataType:'json',
+        }).done(function(data) {
+            let $a = $('<a>');
+            $a.attr('href', data.file);
+            $('body').append($a);
+            $a.attr('download', 'file.xls');
+            $a[0].click();
+            $a.remove();
+        });
+    }
+
     render() {
         if(this.state.museusData !== null) {
             return(
-                <AdminPanel museus={this.state.museusData} respostas={this._qtdRespostas} percentual={this._percentualRespostas} parentHandler={this.updateState} />
+                <AdminPanel museus={this.state.museusData} 
+                    respostas={this._qtdRespostas}
+                    percentual={this._percentualRespostas}
+                    parentHandler={this.updateState}
+                    generateXls={this.generateXls}
+                />
             );
         }
         else{
