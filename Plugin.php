@@ -10,6 +10,7 @@ class Plugin extends \MapasCulturais\Plugin {
 
     public function _init() {
         $app = App::i();
+        $self = $this;
         
         // Fazer funcionar apenas no tema de museus:
         if (get_class($app->view) != 'MapasMuseus\Theme')
@@ -54,32 +55,40 @@ class Plugin extends \MapasCulturais\Plugin {
             $this->render('fva-admin');
         });
 
-        $app->hook('POST(panel.generate-xls)', function() use($app) {
+        $app->hook('POST(panel.generate-xls)', function() use($app, $self) {
             // Create new PHPExcel object
             $objPHPExcel = new \PHPExcel();
-        
+
+            // JSON dos museus a serem inclusos no relatório
+            $museusRelatorio = json_decode(file_get_contents('php://input'));
+
             // Set document properties
             $objPHPExcel->getProperties()->setCreator("IBRAM")
             ->setLastModifiedBy("IBRAM")
             ->setTitle("Relatório de Respostas do FVA Corrente")
             ->setSubject("Relatório de Respostas do FVA Corrente")
             ->setDescription("Relatório de Respostas do FVA Corrente")
-            ->setKeywords("relatório FVA")
+            ->setKeywords("Relatório FVA")
             ->setCategory("Relatório");
         
             // Add some data
             $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A1', 'Nome')
-            ->setCellValue('B1', 'Endereço')
-            ->setCellValue('C1', 'Telefone')
-            ->setCellValue('D1', 'email');
-    
-            // Miscellaneous glyphs, UTF-8
-            $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('A2', 'Miscellaneous glyphs')
-            ->setCellValue('B2', 'Rua da Treta')
-            ->setCellValue('C2', '66554422338899')
-            ->setCellValue('D2', 'contato@ibram.com.br');
+            ->setCellValue('A1', 'Museu')
+            ->setCellValue('B1', 'Responsavel')
+            ->setCellValue('C1', 'Email Responsavel')
+            ->setCellValue('D1', 'Telefone Responsavel')
+            ->setCellValue('E1', 'Primeira Participação no FVA')
+            ->setCellValue('F1', 'Motivos Por Não Participar das Edições Anteriores')
+            ->setCellValue('G1', 'Outros Motivos Por Não Participar das Edições Anteriores')
+            ->setCellValue('H1', 'A Instituição realiza contagem de público?')
+            ->setCellValue('I1', 'Técnicas de Contagem Utilizadas')
+            ->setCellValue('J1', 'Outras Técnicas de Contagem Utilizadas')
+            ->setCellValue('K1', 'Justificativa Baixa Visitação')
+            ->setCellValue('L1', 'Total de Visitações')
+            ->setCellValue('M1', 'Observações Sobre Visitação');
+
+                        
+            $self->writeSheetLines($museusRelatorio, $objPHPExcel, $self);
     
             // Rename worksheet
             $objPHPExcel->getActiveSheet()->setTitle('Relatório FVA 2017');
@@ -87,7 +96,6 @@ class Plugin extends \MapasCulturais\Plugin {
     
             // Set active sheet index to the first sheet, so Excel opens this as the first sheet
             $objPHPExcel->setActiveSheetIndex(0);
-    
     
             // Redirect output to a client’s web browser (Excel2007)
             header('Content-Type: application/vnd.ms-excel');
@@ -115,6 +123,41 @@ class Plugin extends \MapasCulturais\Plugin {
             
             echo json_encode($response);
         });
+    }
+
+    private function writeSheetLines($museus, $objPHPExcel, $self) {
+        $line = 2; //A primeira linha destina-se aos cabeçalhos das colunas
+
+        foreach($museus as $m) {
+            $fva = json_decode($m->fva2017);
+        
+            $objPHPExcel->setActiveSheetIndex(0)
+                        ->setCellValue('A' . (string)$line, $m->name)
+                        ->setCellValue('B' . (string)$line, $fva->responsavel->nome->answer)
+                        ->setCellValue('C' . (string)$line, $fva->responsavel->email->answer)
+                        ->setCellValue('D' . (string)$line, $fva->responsavel->telefone->answer)
+                        ->setCellValue('E' . (string)$line, $fva->introducao->primeiraParticipacaoFVA === true ? 'Sim' : 'Não')
+                        ->setCellValue('F' . (string)$line, $self->assertBlockAnswers($fva->introducao->questionarioNaoParticipou->motivos))
+                        ->setCellValue('G' . (string)$line, $fva->introducao->questionarioNaoParticipouOutros->answer !== false ? $fva->introducao->questionarioNaoParticipouOutros->text : '')
+                        ->setCellValue('H' . (string)$line, $fva->visitacao->realizaContagem === true ? 'Sim' : 'Não')
+                        ->setCellValue('I' . (string)$line, $self->assertBlockAnswers($fva->visitacao->tecnicaContagem))
+                        ->setCellValue('J' . (string)$line, $fva->visitacao->tecnicaContagemOutros->answer !== false ? $fva->visitacao->tecnicaContagemOutros->text : '')
+                        ->setCellValue('K' . (string)$line, $fva->visitacao->justificativaBaixaVisitacao->answer !== null ? $fva->visitacao->justificativaBaixaVisitacao->answer : '');
+        
+            $line++;
+        }
+    }
+
+    private function assertBlockAnswers($questionario) {
+        $answers = array();
+
+        foreach($questionario as $questao) {
+            if($questao->answer !== false) {
+                $answers[] = $questao->label;
+            }
+        }
+        $return = implode(", ", $answers);
+        return $return;
     }
 
     public function register() {

@@ -14,9 +14,11 @@ class Index extends React.Component {
 
         this._qtdRespostas = null;
         this._percentualRespostas = null;
+        this._filteredMuseums = null;
 
         this.fetchMuseus = this.fetchMuseus.bind(this);
         this.updateState = this.updateState.bind(this);
+        this.filterMuseums = this.filterMuseums.bind(this);
     }
 
     componentWillMount() {
@@ -40,6 +42,7 @@ class Index extends React.Component {
                         this._qtdRespostas = qtdRespostas;
                         this._percentualRespostas = percentualRespostas;
                         this.setState({museusData: data});
+                        
                     });
             });
 
@@ -93,34 +96,29 @@ class Index extends React.Component {
         }
     }
 
+    //update o estado da aplicação
     updateState() {
         this.fetchMuseus();
     }
 
-    generateXls() {
-        $.ajax({
-            url: MapasCulturais.createUrl('panel', 'generate-xls'),
-            type: 'POST',
-            data: {},
-            dataType:'json',
-        }).done(function(data) {
-            let $a = $('<a>');
-            $a.attr('href', data.file);
-            $('body').append($a);
-            $a.attr('download', 'file.xls');
-            $a[0].click();
-            $a.remove();
+    //filtra os museus que responderam o FVA para gerar o relatório em planilha
+    filterMuseums() {
+        this._filteredMuseums = this.state.museusData.filter((element) => {
+            return element.fva2017 !== null;
         });
     }
 
     render() {
         if(this.state.museusData !== null) {
+            this.filterMuseums();
+            
             return(
-                <AdminPanel museus={this.state.museusData} 
+                <AdminPanel 
+                    museus={this.state.museusData} 
                     respostas={this._qtdRespostas}
                     percentual={this._percentualRespostas}
                     parentHandler={this.updateState}
-                    generateXls={this.generateXls}
+                    filteredMuseums={this._filteredMuseums}
                 />
             );
         }

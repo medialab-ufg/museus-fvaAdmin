@@ -3,6 +3,7 @@ import React from'react';
 import MuseusTable from'../Table/MuseusTable.jsx';
 import Counter from'../Counter/Counter.jsx';
 import PieChart from'../Chart/PieChart.jsx';
+import Excel from'./Excel.jsx';
 import'./panel.css';
 
 export default class AdminPanel extends React.Component {
@@ -18,8 +19,8 @@ export default class AdminPanel extends React.Component {
                 <div id="table-container">
                     <MuseusTable museus={this.props.museus} parentHandler= {this.props.parentHandler} />
                 </div>
-                <div id="generate-xls">
-                    <button onClick={this.props.generateXls}>Gerar Relatório</button>
+                <div id="generate-report">
+                    <Excel filteredMuseums={this.props.filteredMuseums} />
                 </div>
             </div>
         );
