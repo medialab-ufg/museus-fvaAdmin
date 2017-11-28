@@ -34,17 +34,16 @@ class Index extends React.Component {
                 'Accept': 'application/json'
             }
         })
-            .then(response => {
-                response.json()
-                    .then(data => {
-                        const qtdRespostas = countFvasRespondidos(data);
-                        const percentualRespostas = calculatePercentual(data.length, qtdRespostas.respondidos);
-                        this._qtdRespostas = qtdRespostas;
-                        this._percentualRespostas = percentualRespostas;
-                        this.setState({museusData: data});
-                        
-                    });
-            });
+        .then(response => {
+            response.json()
+                .then(data => {
+                    const qtdRespostas = countFvasRespondidos(data);
+                    const percentualRespostas = calculatePercentual(data.length, qtdRespostas.respondidos);
+                    this._qtdRespostas = qtdRespostas;
+                    this._percentualRespostas = percentualRespostas;
+                    this.setState({museusData: data});
+                });
+        });
 
         /**
          * Contabiliza o número de museus que já responderam o FVA

@@ -56,13 +56,12 @@ class Plugin extends \MapasCulturais\Plugin {
         });
 
         $app->hook('POST(panel.generate-xls)', function() use($app, $self) {
-            // Create new PHPExcel object
             $objPHPExcel = new \PHPExcel();
 
             // JSON dos museus a serem inclusos no relatório
             $museusRelatorio = json_decode(file_get_contents('php://input'));
 
-            // Set document properties
+            // Propriedades do Documento
             $objPHPExcel->getProperties()->setCreator("IBRAM")
             ->setLastModifiedBy("IBRAM")
             ->setTitle("Relatório de Respostas do FVA Corrente")
@@ -71,7 +70,7 @@ class Plugin extends \MapasCulturais\Plugin {
             ->setKeywords("Relatório FVA")
             ->setCategory("Relatório");
         
-            // Add some data
+            // Legenda das Colunas da Planilha
             $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', 'Museu')
             ->setCellValue('B1', 'Responsavel')
@@ -85,33 +84,35 @@ class Plugin extends \MapasCulturais\Plugin {
             ->setCellValue('J1', 'Outras Técnicas de Contagem Utilizadas')
             ->setCellValue('K1', 'Justificativa Baixa Visitação')
             ->setCellValue('L1', 'Total de Visitações')
-            ->setCellValue('M1', 'Observações Sobre Visitação');
-
+            ->setCellValue('M1', 'Observações Sobre Visitação')
+            ->setCellValue('N1', 'Meios Pelos Quais Soube do FVA')
+            ->setCellValue('O1', 'Outras Mídias FVA')
+            ->setCellValue('P1', 'Opinião Sobre o Questionário FVA');
                         
+            // Preenche a planilha com os dados
             $self->writeSheetLines($museusRelatorio, $objPHPExcel, $self);
     
-            // Rename worksheet
+            // Nomeia a Planilha
             $objPHPExcel->getActiveSheet()->setTitle('Relatório FVA 2017');
   
-    
-            // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+            // Seta a primeira planilha como a ativa
             $objPHPExcel->setActiveSheetIndex(0);
     
-            // Redirect output to a client’s web browser (Excel2007)
+            // Headers a serem enviados na resposta (Excel2007)
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="01simple.xls"');
             header('Cache-Control: max-age=0');
-            // If you're serving to IE 9, then the following may be needed
+            // Necessário para o IE9
             header('Cache-Control: max-age=1');
     
-            // If you're serving to IE over SSL, then the following may be needed
-            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+            header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Não expira
+            header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // sempre modificado
             header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
             header ('Pragma: public'); // HTTP/1.0
     
             $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
             
+            //Salva a planilha no buffer de saída
             ob_start();
             $objWriter->save("php://output");
             $xlsData = ob_get_contents();
@@ -125,6 +126,14 @@ class Plugin extends \MapasCulturais\Plugin {
         });
     }
 
+    /**
+     * Escreve cada linha da exportação dos dados do FVA em planilha em suas respectivas colunas
+     *
+     * @param array $museus
+     * @param obj $objPHPExcel
+     * @param pointer $self
+     * @return void
+     */
     private function writeSheetLines($museus, $objPHPExcel, $self) {
         $line = 2; //A primeira linha destina-se aos cabeçalhos das colunas
 
@@ -136,18 +145,31 @@ class Plugin extends \MapasCulturais\Plugin {
                         ->setCellValue('B' . (string)$line, $fva->responsavel->nome->answer)
                         ->setCellValue('C' . (string)$line, $fva->responsavel->email->answer)
                         ->setCellValue('D' . (string)$line, $fva->responsavel->telefone->answer)
-                        ->setCellValue('E' . (string)$line, $fva->introducao->primeiraParticipacaoFVA === true ? 'Sim' : 'Não')
+                        ->setCellValue('E' . (string)$line, $fva->introducao->primeiraParticipacaoFVA->answer === true ? 'Sim' : 'Não')
                         ->setCellValue('F' . (string)$line, $self->assertBlockAnswers($fva->introducao->questionarioNaoParticipou->motivos))
                         ->setCellValue('G' . (string)$line, $fva->introducao->questionarioNaoParticipouOutros->answer !== false ? $fva->introducao->questionarioNaoParticipouOutros->text : '')
                         ->setCellValue('H' . (string)$line, $fva->visitacao->realizaContagem === true ? 'Sim' : 'Não')
                         ->setCellValue('I' . (string)$line, $self->assertBlockAnswers($fva->visitacao->tecnicaContagem))
                         ->setCellValue('J' . (string)$line, $fva->visitacao->tecnicaContagemOutros->answer !== false ? $fva->visitacao->tecnicaContagemOutros->text : '')
-                        ->setCellValue('K' . (string)$line, $fva->visitacao->justificativaBaixaVisitacao->answer !== null ? $fva->visitacao->justificativaBaixaVisitacao->answer : '');
+                        ->setCellValue('K' . (string)$line, $fva->visitacao->justificativaBaixaVisitacao->answer !== null ? $fva->visitacao->justificativaBaixaVisitacao->answer : '')
+                        ->setCellValue('L' . (string)$line, $fva->visitacao->quantitativo->answer !== null ? $fva->visitacao->quantitativo->answer : '')
+                        ->setCellValue('M' . (string)$line, $fva->visitacao->observacoes->answer !== null ? $fva->visitacao->observacoes->answer : '')
+                        ->setCellValue('N' . (string)$line, $self->assertBlockAnswers($fva->avaliacao->midias))
+                        ->setCellValue('O' . (string)$line, $fva->avaliacao->midiasOutros->answer !== false ? $fva->avaliacao->midiasOutros->text : '')
+                        ->setCellValue('P' . (string)$line, $fva->avaliacao->opiniao->text !== null ? $fva->avaliacao->opiniao->text : '');
+                        
         
             $line++;
         }
     }
 
+    /**
+     * Analisa um bloco de questões da exportação da planilha. Se tiver sido marcado como 'true', retorna o label da questão
+     * e grava na respectiva linha
+     *
+     * @param array $questionario
+     * @return string
+     */
     private function assertBlockAnswers($questionario) {
         $answers = array();
 

@@ -60,7 +60,7 @@
     padding-bottom: 100px;
 }
 
-.btn-reopen {
+.btn-reopen, #btn-generate-report {
     font-size: 12px;
     padding: 0 10px;
     margin: 0;
@@ -71,6 +71,10 @@
     -moz-border-radius: 10px;
     border-radius: 10px;
     cursor: pointer;
+}
+
+#btn-generate-report {
+    margin-top: 15px;
 }
 
 .input-filter {

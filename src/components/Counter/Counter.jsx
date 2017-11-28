@@ -2,7 +2,7 @@
 import React from'react';
 import CountUp from'react-countup';
 
-export default class Counter extends React.PureComponent {
+export default class Counter extends React.Component {
     constructor(props) {
         super(props);
 

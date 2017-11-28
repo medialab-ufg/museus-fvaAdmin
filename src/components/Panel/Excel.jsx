@@ -4,12 +4,20 @@ import React from'react';
 export default class Excel extends React.PureComponent {
     constructor(props) {
         super(props);
-        console.log(this.props.filteredMuseums);
+
         this.state = {
             filteredMuseums: this.props.filteredMuseums
         };
 
         this.generateXls = this.generateXls.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.state.filteredMuseums !== nextProps.filteredMuseums) {
+            this.setState({
+                filteredMuseums: nextProps.filteredMuseums
+            });
+        }
     }
 
     generateXls() {
@@ -30,7 +38,7 @@ export default class Excel extends React.PureComponent {
 
     render() {
         return(
-            <button onClick={this.generateXls}>Gerar Relatório</button>
+            <button id='btn-generate-report' onClick={this.generateXls}>Gerar Relatório</button>
         );
     }
 }
