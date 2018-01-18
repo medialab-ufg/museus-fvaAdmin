@@ -30,7 +30,7 @@ class Plugin extends \MapasCulturais\Plugin {
             $controllerAtual = $app->view->getController();
             
             if(property_exists($controllerAtual, 'action') && $controllerAtual->action === 'fva-admin') {
-                $app->view->enqueueScript('app', 'bundle', '../views/panel/bundle.js');
+                $app->view->enqueueScript('app', 'bundle', '/bundle.js');
             }
         });
 
