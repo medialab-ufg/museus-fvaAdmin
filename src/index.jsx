@@ -26,8 +26,8 @@ class Index extends React.Component {
     }
 
     fetchMuseus() {
-        const endpointURL = MapasCulturais.createUrl('api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico');
-        //const endpointURL = 'http://museus.mapas.local:8090/api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico';
+        //const endpointURL = MapasCulturais.createUrl('api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod');
+        const endpointURL = 'http://museus.mapas.local:8090/api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod';
         console.log(endpointURL);
         
         fetch(endpointURL, {
@@ -59,7 +59,7 @@ class Index extends React.Component {
             
             _.each(museusJson, function(value, key) {
                 _.each(value, function(value, key) {
-                    if(key === 'fva2017') {
+                    if(key === 'fva2018') {
                         if(value !== null) {
                             respondidos++;
                         }
@@ -105,7 +105,7 @@ class Index extends React.Component {
     //filtra os museus que responderam o FVA para gerar o relatório em planilha
     filterMuseums() {
         this._filteredMuseums = this.state.museusData.filter((element) => {
-            return element.fva2017 !== null;
+            return element.fva2018 !== null;
         });
     }
 

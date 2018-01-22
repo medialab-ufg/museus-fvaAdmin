@@ -40,7 +40,7 @@ class Plugin extends \MapasCulturais\Plugin {
 
             $id = json_decode(file_get_contents('php://input'));
             $spaceEntity = $app->repo('Space')->find($id);
-            $spaceFva = $spaceEntity->getMetadata('fva2017', true);
+            $spaceFva = $spaceEntity->getMetadata('fva2018', true);
             $spaceFva->delete(true);
         });
 
@@ -92,11 +92,10 @@ class Plugin extends \MapasCulturais\Plugin {
             ->setCellValue('Q1', 'Opinião Sobre o Questionário FVA');
                         
             // Preenche a planilha com os dados
-            /* echo json_encode($museusRelatorio);die; */
             $self->writeSheetLines($museusRelatorio, $objPHPExcel, $self);
     
             // Nomeia a Planilha
-            $objPHPExcel->getActiveSheet()->setTitle('Relatório FVA 2017');
+            $objPHPExcel->getActiveSheet()->setTitle('Relatório FVA 2018');
   
             // Seta a primeira planilha como a ativa
             $objPHPExcel->setActiveSheetIndex(0);
@@ -141,7 +140,7 @@ class Plugin extends \MapasCulturais\Plugin {
         $line = 2; //A primeira linha destina-se aos cabeçalhos das colunas
 
         foreach($museus as $m) {
-            $fva = json_decode($m->fva2017);
+            $fva = json_decode($m->fva2018);
             
             $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A' . (string)$line, $m->name)

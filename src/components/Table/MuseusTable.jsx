@@ -26,7 +26,7 @@ export default class MuseusTable extends React.Component {
         }, {
             Header: 'Respondido',
             filterable: false,
-            accessor: 'fva2017',
+            accessor: 'fva2018',
             getProps: () => {
                 return{
                     style: {
@@ -34,7 +34,7 @@ export default class MuseusTable extends React.Component {
                     }
                 };
             },
-            Cell: props => <span>{props.row.fva2017 !== null ? <DeleteButton museumId={props.original.id} parentHandler={handler}/>: 'não'}</span>,
+            Cell: props => <span>{props.row.fva2018 !== null ? <DeleteButton museumId={props.original.id} parentHandler={handler}/>: 'não'}</span>,
             width: 100
         }, {
             Header: 'Cidade',
