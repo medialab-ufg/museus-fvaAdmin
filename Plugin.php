@@ -30,7 +30,7 @@ class Plugin extends \MapasCulturais\Plugin {
             $controllerAtual = $app->view->getController();
             
             if(property_exists($controllerAtual, 'action') && $controllerAtual->action === 'fva-admin') {
-                $app->view->enqueueScript('app', 'bundle', '../views/panel/bundle.js');
+                $app->view->enqueueScript('app', 'bundle', '/bundle.js');
             }
         });
 
@@ -55,9 +55,10 @@ class Plugin extends \MapasCulturais\Plugin {
             $this->render('fva-admin');
         });
 
+        //Geração da planilha de museus que responderam FVA
         $app->hook('POST(panel.generate-xls)', function() use($app, $self) {
             $objPHPExcel = new \PHPExcel();
-
+            
             // JSON dos museus a serem inclusos no relatório
             $museusRelatorio = json_decode(file_get_contents('php://input'));
 
@@ -73,23 +74,25 @@ class Plugin extends \MapasCulturais\Plugin {
             // Legenda das Colunas da Planilha
             $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', 'Museu')
-            ->setCellValue('B1', 'Responsavel')
-            ->setCellValue('C1', 'Email Responsavel')
-            ->setCellValue('D1', 'Telefone Responsavel')
-            ->setCellValue('E1', 'Primeira Participação no FVA')
-            ->setCellValue('F1', 'Motivos Por Não Participar das Edições Anteriores')
-            ->setCellValue('G1', 'Outros Motivos Por Não Participar das Edições Anteriores')
-            ->setCellValue('H1', 'A Instituição realiza contagem de público?')
-            ->setCellValue('I1', 'Técnicas de Contagem Utilizadas')
-            ->setCellValue('J1', 'Outras Técnicas de Contagem Utilizadas')
-            ->setCellValue('K1', 'Justificativa Baixa Visitação')
-            ->setCellValue('L1', 'Total de Visitações')
-            ->setCellValue('M1', 'Observações Sobre Visitação')
-            ->setCellValue('N1', 'Meios Pelos Quais Soube do FVA')
-            ->setCellValue('O1', 'Outras Mídias FVA')
-            ->setCellValue('P1', 'Opinião Sobre o Questionário FVA');
+            ->setCellValue('B1', 'Código Museu')
+            ->setCellValue('C1', 'Responsavel')
+            ->setCellValue('D1', 'Email Responsavel')
+            ->setCellValue('E1', 'Telefone Responsavel')
+            ->setCellValue('F1', 'Primeira Participação no FVA')
+            ->setCellValue('G1', 'Motivos Por Não Participar das Edições Anteriores')
+            ->setCellValue('H1', 'Outros Motivos Por Não Participar das Edições Anteriores')
+            ->setCellValue('I1', 'A Instituição realiza contagem de público?')
+            ->setCellValue('J1', 'Técnicas de Contagem Utilizadas')
+            ->setCellValue('K1', 'Outras Técnicas de Contagem Utilizadas')
+            ->setCellValue('L1', 'Justificativa Baixa Visitação')
+            ->setCellValue('M1', 'Total de Visitações')
+            ->setCellValue('N1', 'Observações Sobre Visitação')
+            ->setCellValue('O1', 'Meios Pelos Quais Soube do FVA')
+            ->setCellValue('P1', 'Outras Mídias FVA')
+            ->setCellValue('Q1', 'Opinião Sobre o Questionário FVA');
                         
             // Preenche a planilha com os dados
+            /* echo json_encode($museusRelatorio);die; */
             $self->writeSheetLines($museusRelatorio, $objPHPExcel, $self);
     
             // Nomeia a Planilha
@@ -139,24 +142,25 @@ class Plugin extends \MapasCulturais\Plugin {
 
         foreach($museus as $m) {
             $fva = json_decode($m->fva2017);
-        
+            
             $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A' . (string)$line, $m->name)
-                        ->setCellValue('B' . (string)$line, $fva->responsavel->nome->answer)
-                        ->setCellValue('C' . (string)$line, $fva->responsavel->email->answer)
-                        ->setCellValue('D' . (string)$line, $fva->responsavel->telefone->answer)
-                        ->setCellValue('E' . (string)$line, $fva->introducao->primeiraParticipacaoFVA->answer === true ? 'Sim' : 'Não')
-                        ->setCellValue('F' . (string)$line, $self->assertBlockAnswers($fva->introducao->questionarioNaoParticipou->motivos))
-                        ->setCellValue('G' . (string)$line, $fva->introducao->questionarioNaoParticipouOutros->answer !== false ? $fva->introducao->questionarioNaoParticipouOutros->text : '')
-                        ->setCellValue('H' . (string)$line, $fva->visitacao->realizaContagem === true ? 'Sim' : 'Não')
-                        ->setCellValue('I' . (string)$line, $self->assertBlockAnswers($fva->visitacao->tecnicaContagem))
-                        ->setCellValue('J' . (string)$line, $fva->visitacao->tecnicaContagemOutros->answer !== false ? $fva->visitacao->tecnicaContagemOutros->text : '')
-                        ->setCellValue('K' . (string)$line, $fva->visitacao->justificativaBaixaVisitacao->answer !== null ? $fva->visitacao->justificativaBaixaVisitacao->answer : '')
-                        ->setCellValue('L' . (string)$line, $fva->visitacao->quantitativo->answer !== null ? $fva->visitacao->quantitativo->answer : '')
-                        ->setCellValue('M' . (string)$line, $fva->visitacao->observacoes->answer !== null ? $fva->visitacao->observacoes->answer : '')
-                        ->setCellValue('N' . (string)$line, $self->assertBlockAnswers($fva->avaliacao->midias))
-                        ->setCellValue('O' . (string)$line, $fva->avaliacao->midiasOutros->answer !== false ? $fva->avaliacao->midiasOutros->text : '')
-                        ->setCellValue('P' . (string)$line, $fva->avaliacao->opiniao->text !== null ? $fva->avaliacao->opiniao->text : '');
+                        ->setCellValue('B' . (string)$line, $m->mus_cod)
+                        ->setCellValue('C' . (string)$line, $fva->responsavel->nome->answer)
+                        ->setCellValue('D' . (string)$line, $fva->responsavel->email->answer)
+                        ->setCellValue('E' . (string)$line, $fva->responsavel->telefone->answer)
+                        ->setCellValue('F' . (string)$line, $fva->introducao->primeiraParticipacaoFVA->answer === true ? 'Sim' : 'Não')
+                        ->setCellValue('G' . (string)$line, $self->assertBlockAnswers($fva->introducao->questionarioNaoParticipou->motivos))
+                        ->setCellValue('H' . (string)$line, $fva->introducao->questionarioNaoParticipouOutros->answer !== false ? $fva->introducao->questionarioNaoParticipouOutros->text : '')
+                        ->setCellValue('I' . (string)$line, $fva->visitacao->realizaContagem === true ? 'Sim' : 'Não')
+                        ->setCellValue('J' . (string)$line, $self->assertBlockAnswers($fva->visitacao->tecnicaContagem))
+                        ->setCellValue('K' . (string)$line, $fva->visitacao->tecnicaContagemOutros->answer !== false ? $fva->visitacao->tecnicaContagemOutros->text : '')
+                        ->setCellValue('L' . (string)$line, $fva->visitacao->justificativaBaixaVisitacao->answer !== null ? $fva->visitacao->justificativaBaixaVisitacao->answer : '')
+                        ->setCellValue('M' . (string)$line, $fva->visitacao->quantitativo->answer !== null ? $fva->visitacao->quantitativo->answer : '')
+                        ->setCellValue('N' . (string)$line, $fva->visitacao->observacoes->answer !== null ? $fva->visitacao->observacoes->answer : '')
+                        ->setCellValue('O' . (string)$line, $self->assertBlockAnswers($fva->avaliacao->midias))
+                        ->setCellValue('P' . (string)$line, $fva->avaliacao->midiasOutros->answer !== false ? $fva->avaliacao->midiasOutros->text : '')
+                        ->setCellValue('Q' . (string)$line, $fva->avaliacao->opiniao->text !== null ? $fva->avaliacao->opiniao->text : '');
                         
         
             $line++;

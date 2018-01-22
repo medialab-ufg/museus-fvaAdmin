@@ -27,6 +27,8 @@ class Index extends React.Component {
 
     fetchMuseus() {
         const endpointURL = MapasCulturais.createUrl('api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico');
+        //const endpointURL = 'http://museus.mapas.local:8090/api/space/find/?@select=name,fva2017,emailPublico,En_Estado,En_Municipio,telefonePublico';
+        console.log(endpointURL);
         
         fetch(endpointURL, {
             method: 'GET',
@@ -34,16 +36,16 @@ class Index extends React.Component {
                 'Accept': 'application/json'
             }
         })
-        .then(response => {
-            response.json()
-                .then(data => {
-                    const qtdRespostas = countFvasRespondidos(data);
-                    const percentualRespostas = calculatePercentual(data.length, qtdRespostas.respondidos);
-                    this._qtdRespostas = qtdRespostas;
-                    this._percentualRespostas = percentualRespostas;
-                    this.setState({museusData: data});
-                });
-        });
+            .then(response => {
+                response.json()
+                    .then(data => {
+                        const qtdRespostas = countFvasRespondidos(data);
+                        const percentualRespostas = calculatePercentual(data.length, qtdRespostas.respondidos);
+                        this._qtdRespostas = qtdRespostas;
+                        this._percentualRespostas = percentualRespostas;
+                        this.setState({museusData: data});
+                    });
+            });
 
         /**
          * Contabiliza o número de museus que já responderam o FVA
