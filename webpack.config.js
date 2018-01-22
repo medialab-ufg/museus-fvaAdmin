@@ -11,7 +11,7 @@ module.exports = {
   entry: './src/index.jsx',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, 'views/panel')
+    path: path.resolve(__dirname, 'assets')
   },
   plugins: {
     uglify: {
