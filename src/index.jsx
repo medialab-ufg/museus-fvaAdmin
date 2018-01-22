@@ -26,8 +26,8 @@ class Index extends React.Component {
     }
 
     fetchMuseus() {
-        //const endpointURL = MapasCulturais.createUrl('api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod');
-        const endpointURL = 'http://museus.mapas.local:8090/api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod';
+        const endpointURL = MapasCulturais.createUrl('api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod');
+        //const endpointURL = 'http://museus.mapas.local:8090/api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod';
         console.log(endpointURL);
         
         fetch(endpointURL, {
