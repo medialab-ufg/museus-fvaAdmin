@@ -12,7 +12,12 @@ export default class AdminPanel extends React.Component {
     render() {
         return(
             <div id="panel-container">
-                
+                <div id="select-year-container">
+                    <SelectFVAYear />
+                </div>
+                <div id="toggle-container">
+                    <ToggleOpenFVA />
+                </div>
                 <div id="counter-container">
                     <Counter respostas={this.props.respostas} />
                 </div>
