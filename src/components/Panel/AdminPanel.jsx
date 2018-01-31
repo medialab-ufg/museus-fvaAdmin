@@ -4,12 +4,20 @@ import MuseusTable from'../Table/MuseusTable.jsx';
 import Counter from'../Counter/Counter.jsx';
 import PieChart from'../Chart/PieChart.jsx';
 import Excel from'./Excel.jsx';
+import ToggleOpenFVA from'../Toggle/ToggleOpenFVA.jsx';
+import SelectFVAYear from'../Select/SelectFVAYear.jsx';
 import'./panel.css';
 
 export default class AdminPanel extends React.Component {
     render() {
         return(
             <div id="panel-container">
+                <div id="select-year-container">
+                    <SelectFVAYear />
+                </div>
+                <div id="toggle-container">
+                    <ToggleOpenFVA />
+                </div>
                 <div id="counter-container">
                     <Counter respostas={this.props.respostas} />
                 </div>

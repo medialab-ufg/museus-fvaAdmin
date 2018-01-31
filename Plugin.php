@@ -44,6 +44,38 @@ class Plugin extends \MapasCulturais\Plugin {
             $spaceFva->delete(true);
         });
 
+        //Grava a flag que FVA está disponível para ser respondido
+        $app->hook('POST(panel.openFVA)', function() use($app, $self){
+            $fvaCurrentStatus = json_decode(file_get_contents('php://input'));
+            $fvaEntity = $app->repo('SubsiteMeta');
+            $fvaEntity->statusFva = $fvaCurrentStatus;
+            //$fvaEntity->yearsAvailable = array('fva2016', 'fva2017');
+            $fvaAtual = $self->getCurrentFva();
+            
+
+            //Verifica se a entidade 'SubsiteMeta' já tem o array referente aos anos de aplicação do FVA
+            if(property_exists($fvaEntity, 'yearsAvailable')) {
+                if(!in_array($fvaAtual, $fvaEntity->yearsAvailable)) {
+                    $fvaEntity->yearsAvailable[] = $fvaAtual;
+                }
+            }
+            else {
+                $fvaEntity->yearsAvailable = array($fvaAtual);
+            }
+
+            //echo json_encode($fvaEntity);die;
+            $fvaEntity->save(true);
+        });
+
+        //Retorna os anos disponíveis para consulta FVA
+        $app->hook('GET(panel.getYearsAvailable)', function() use($app, $self){
+            $fvaEntity = $app->repo('SubsiteMeta');
+
+            echo json_encode($fvaEntity->yearsAvailable);die;
+        });
+
+       
+
         //Hook que carrega o HTML gerado pelo build do ReactJS
         $app->hook('GET(panel.fva-admin)', function() use ($app) {
             $this->requireAuthentication();
@@ -126,6 +158,18 @@ class Plugin extends \MapasCulturais\Plugin {
             
             echo json_encode($response);
         });
+    }
+
+     /**
+     * Informa a versão Fva do ano corrente
+     *
+     * @return string
+     */
+    private function getCurrentFva(){
+        $ano = \date('Y');
+        $currentFva = "fva$ano";
+        
+        return $currentFva;
     }
 
     /**

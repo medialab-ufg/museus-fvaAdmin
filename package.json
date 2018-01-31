@@ -12,7 +12,9 @@
     "react-confirm-alert": "^1.0.8",
     "react-countup": "^2.3.0",
     "react-dom": "^15.6.2",
-    "react-table": "^6.6.0"
+    "react-super-select": "^1.0.9",
+    "react-table": "^6.6.0",
+    "react-toggle-button": "^2.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
