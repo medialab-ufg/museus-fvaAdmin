@@ -11,7 +11,7 @@ class Plugin extends \MapasCulturais\Plugin {
     public function _init() {
         $app = App::i();
         $self = $this;
-        
+
         // Fazer funcionar apenas no tema de museus:
         if (get_class($app->view) != 'MapasMuseus\Theme')
             return;
@@ -28,7 +28,7 @@ class Plugin extends \MapasCulturais\Plugin {
         //Registra o js do painel admin
         $app->hook('mapasculturais.head', function() use($app){
             $controllerAtual = $app->view->getController();
-            
+
             if(property_exists($controllerAtual, 'action') && $controllerAtual->action === 'fva-admin') {
                 $app->view->enqueueScript('app', 'bundle', '/bundle.js');
             }
@@ -51,7 +51,7 @@ class Plugin extends \MapasCulturais\Plugin {
             $fvaEntity->statusFva = $fvaCurrentStatus;
             //$fvaEntity->yearsAvailable = array('fva2016', 'fva2017');
             $fvaAtual = $self->getCurrentFva();
-            
+
 
             //Verifica se a entidade 'SubsiteMeta' já tem o array referente aos anos de aplicação do FVA
             if(property_exists($fvaEntity, 'yearsAvailable')) {
@@ -74,23 +74,24 @@ class Plugin extends \MapasCulturais\Plugin {
             echo json_encode($fvaEntity->yearsAvailable);die;
         });
 
-       
+
 
         //Hook que carrega o HTML gerado pelo build do ReactJS
         $app->hook('GET(panel.fva-admin)', function() use ($app) {
+
             $this->requireAuthentication();
-            
+
             if(!$app->user->is('admin') && !$app->user->is('staff')){
                 $app->pass();
             }
-            
+
             $this->render('fva-admin');
         });
 
         //Geração da planilha de museus que responderam FVA
         $app->hook('POST(panel.generate-xls)', function() use($app, $self) {
             $objPHPExcel = new \PHPExcel();
-            
+
             // JSON dos museus a serem inclusos no relatório
             $museusRelatorio = json_decode(file_get_contents('php://input'));
 
@@ -102,7 +103,7 @@ class Plugin extends \MapasCulturais\Plugin {
             ->setDescription("Relatório de Respostas do FVA Corrente")
             ->setKeywords("Relatório FVA")
             ->setCategory("Relatório");
-        
+
             // Legenda das Colunas da Planilha
             $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', 'Museu')
@@ -122,40 +123,40 @@ class Plugin extends \MapasCulturais\Plugin {
             ->setCellValue('O1', 'Meios Pelos Quais Soube do FVA')
             ->setCellValue('P1', 'Outras Mídias FVA')
             ->setCellValue('Q1', 'Opinião Sobre o Questionário FVA');
-                        
+
             // Preenche a planilha com os dados
             $self->writeSheetLines($museusRelatorio, $objPHPExcel, $self);
-    
+
             // Nomeia a Planilha
             $objPHPExcel->getActiveSheet()->setTitle('Relatório FVA 2018');
-  
+
             // Seta a primeira planilha como a ativa
             $objPHPExcel->setActiveSheetIndex(0);
-    
+
             // Headers a serem enviados na resposta (Excel2007)
             header('Content-Type: application/vnd.ms-excel');
             header('Content-Disposition: attachment;filename="01simple.xls"');
             header('Cache-Control: max-age=0');
             // Necessário para o IE9
             header('Cache-Control: max-age=1');
-    
+
             header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Não expira
             header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // sempre modificado
             header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
             header ('Pragma: public'); // HTTP/1.0
-    
+
             $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-            
+
             //Salva a planilha no buffer de saída
             ob_start();
             $objWriter->save("php://output");
             $xlsData = ob_get_contents();
             ob_end_clean();
-            
+
             $response =  array(
                 'file' => "data:application/vnd.ms-excel;base64,".base64_encode($xlsData)
             );
-            
+
             echo json_encode($response);
         });
     }
@@ -168,7 +169,7 @@ class Plugin extends \MapasCulturais\Plugin {
     private function getCurrentFva(){
         $ano = \date('Y');
         $currentFva = "fva$ano";
-        
+
         return $currentFva;
     }
 
@@ -185,7 +186,7 @@ class Plugin extends \MapasCulturais\Plugin {
 
         foreach($museus as $m) {
             $fva = json_decode($m->fva2018);
-            
+
             $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A' . (string)$line, $m->name)
                         ->setCellValue('B' . (string)$line, $m->mus_cod)
@@ -204,8 +205,8 @@ class Plugin extends \MapasCulturais\Plugin {
                         ->setCellValue('O' . (string)$line, $self->assertBlockAnswers($fva->avaliacao->midias))
                         ->setCellValue('P' . (string)$line, $fva->avaliacao->midiasOutros->answer !== false ? $fva->avaliacao->midiasOutros->text : '')
                         ->setCellValue('Q' . (string)$line, $fva->avaliacao->opiniao->text !== null ? $fva->avaliacao->opiniao->text : '');
-                        
-        
+
+
             $line++;
         }
     }
@@ -230,6 +231,6 @@ class Plugin extends \MapasCulturais\Plugin {
     }
 
     public function register() {
-        
+
     }
 }
