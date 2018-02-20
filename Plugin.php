@@ -87,7 +87,6 @@ class Plugin extends \MapasCulturais\Plugin {
                 $_agents[$indice] = array(
                     'id'        => $agent->id,
                     'name'      => $agent->name,
-                    'endereco'  => $agent->endereco,
                     'singleUrl' => $agent->singleUrl
 
                 );

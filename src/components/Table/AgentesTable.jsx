@@ -9,7 +9,6 @@ export default class AgentesTable extends React.Component {
     render() {
         const handler         = this.props.parentHandler;
         const filterAgentName = (filter, row) => row.name.toLowerCase().indexOf(filter.value.toLowerCase()) !== -1;
-        const filterMunicipio = (filter, row) => row.En_Municipio.toLowerCase().indexOf(filter.value.toLowerCase()) !== -1;
         const filterAgentId   = (filter, row) => row.id.toLowerCase().indexOf(filter.value.toLowerCase()) !== -1;
 
         const columns = [{
@@ -33,18 +32,6 @@ export default class AgentesTable extends React.Component {
                 <input
                     type="text"
                     placeholder="Pesquise por ID"
-                    style={{ width: '100%' }}
-                    onChange={event => onChange(event.target.value)}
-                />
-
-        }, {
-            Header: 'Município',
-            accessor: 'En_Municipio',
-            filterMethod: filterMunicipio,
-            Filter: ({filter, onChange}) =>
-                <input
-                    type="text"
-                    placeholder="Pesquise por município"
                     style={{ width: '100%' }}
                     onChange={event => onChange(event.target.value)}
                 />
