@@ -79,13 +79,8 @@ class Plugin extends \MapasCulturais\Plugin {
 
         //Retorna os agentes como rascunho
         $app->hook('GET(panel.getAgentsDraft)', function() use($app, $self){
-            $this->requireAuthentication();
 
-            if(!$app->user->is('admin') && !$app->user->is('staff')){
-                $app->pass();
-            }
-            
-            $agents = $app->repo('Agent')->findBy(array('status' => 0));
+            $agents = $app->repo('Agent')->findBy(array('status' => 0),array('id' => 'DESC'));
 
             $_agents = [];
             foreach ($agents as $indice => $agent) {
@@ -97,7 +92,7 @@ class Plugin extends \MapasCulturais\Plugin {
 
                 );
             }
-            echo json_encode($agents);
+            echo json_encode($_agents);
             die;
 
         });

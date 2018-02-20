@@ -30,7 +30,8 @@ export default class AdminPanel extends React.Component {
                 <hr/>
                 <h2>Agentes como Rascunho</h2>
 
-                <div id="table-container">
+                <div className="lds-ring" id="table-agents-loading"><div></div><div></div><div></div><div></div></div>
+                <div id="table-container-agents" style={{display:'none'}}>
                     <AgentesTable agentes={this.props.agentes} parentHandler= {this.props.parentHandler} />
                 </div>
             </div>

@@ -118,6 +118,8 @@ class Index extends React.Component {
             dataType:'json',
         }).done(function(data) {
             this.setState({agentsDraft: data});
+            $('#table-container-agents').show();
+            $('#table-agents-loading').hide();
         }.bind(this));
     }
 
