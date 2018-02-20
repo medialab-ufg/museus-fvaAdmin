@@ -10,7 +10,8 @@ class Index extends React.Component {
 
         this.state = {
             museusData: null,
-            selectedYear: null
+            selectedYear: null,
+            agentsDraft: []
         };
 
         this._qtdRespostas = null;
@@ -30,7 +31,7 @@ class Index extends React.Component {
     fetchMuseus() {
         const endpointURL = MapasCulturais.baseURL + 'api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod';
         //const endpointURL = 'http://museus.mapas.local:8090/api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod';
-        
+
         fetch(endpointURL, {
             method: 'GET',
             headers: {
@@ -50,14 +51,14 @@ class Index extends React.Component {
 
         /**
          * Contabiliza o número de museus que já responderam o FVA
-         * @param {JSON} museusJson 
+         * @param {JSON} museusJson
          * @return {OBJ}
          */
         function countFvasRespondidos(museusJson) {
             const totalMuseus = museusJson.length;
             let respondidos = 0;
             let naoRespondidos = 0;
-            
+
             _.each(museusJson, function(value, key) {
                 _.each(value, function(value, key) {
                     if(key === 'fva2018') {
@@ -67,17 +68,17 @@ class Index extends React.Component {
                     }
                 });
             });
-            
+
             naoRespondidos = totalMuseus - respondidos;
-            
+
             return{respondidos, naoRespondidos};
         }
 
         /**
          * Contabiliza o percentual de museus que responderam o FVA
          * @param {INT} totalMuseus
-         * @param {INT} totalMuseusResponderam 
-         * @return {INT} 
+         * @param {INT} totalMuseusResponderam
+         * @return {INT}
          */
         function calculatePercentual(totalMuseus, totalMuseusResponderam) {
             const percentualRespondido = _.round(totalMuseusResponderam / totalMuseus * 100, 2);
@@ -109,6 +110,17 @@ class Index extends React.Component {
         });
     }
 
+    //retorna os agentes como rascunho
+    componentDidMount() {
+        $.ajax({
+            url: MapasCulturais.createUrl('panel', 'getAgentsDraft'),
+            type: 'GET',
+            dataType:'json',
+        }).done(function(data) {
+            this.setState({agentsDraft: data});
+        }.bind(this));
+    }
+
     //update o estado da aplicação
     updateState() {
         this.fetchMuseus();
@@ -125,10 +137,11 @@ class Index extends React.Component {
     render() {
         if(this.state.museusData !== null) {
             this.filterMuseums();
-            
+
             return(
-                <AdminPanel 
-                    museus={this.state.museusData} 
+                <AdminPanel
+                    museus={this.state.museusData}
+                    agentes={this.state.agentsDraft}
                     respostas={this._qtdRespostas}
                     percentual={this._percentualRespostas}
                     parentHandler={this.updateState}

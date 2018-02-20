@@ -76,6 +76,34 @@ class Plugin extends \MapasCulturais\Plugin {
 
 
 
+
+        //Retorna os agentes como rascunho
+        $app->hook('GET(panel.getAgentsDraft)', function() use($app, $self){
+            $this->requireAuthentication();
+
+            if(!$app->user->is('admin') && !$app->user->is('staff')){
+                $app->pass();
+            }
+            
+            $agents = $app->repo('Agent')->findBy(array('status' => 0));
+
+            $_agents = [];
+            foreach ($agents as $indice => $agent) {
+                $_agents[$indice] = array(
+                    'id'        => $agent->id,
+                    'name'      => $agent->name,
+                    'endereco'  => $agent->endereco,
+                    'singleUrl' => $agent->singleUrl
+
+                );
+            }
+            echo json_encode($agents);
+            die;
+
+        });
+
+
+
         //Hook que carrega o HTML gerado pelo build do ReactJS
         $app->hook('GET(panel.fva-admin)', function() use ($app) {
 
