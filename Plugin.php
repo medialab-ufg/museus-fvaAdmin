@@ -78,7 +78,7 @@ class Plugin extends \MapasCulturais\Plugin {
 
 
         //Retorna os agentes como rascunho
-        $app->hook('GET(panel.getAgentsDraft)', function() use($app, $self){
+        $app->hook('GET(panel.agentsDraft)', function() use($app, $self){
 
             $agents = $app->repo('Agent')->findBy(array('status' => 0),array('id' => 'DESC'));
 
@@ -94,6 +94,29 @@ class Plugin extends \MapasCulturais\Plugin {
             echo json_encode($_agents);
             die;
 
+        });
+
+        //Força um agente a ser publicado
+        $app->hook('POST(panel.agentsDraft)', function() use($app, $self){
+
+
+            echo $agentId = json_decode(file_get_contents('php://input'));
+
+            $agent = $app->repo('Agent')->find($agentId);
+            $agent->status = 1;
+
+            #$app->disableAccessControl();
+            $agent->save(true);
+            #$app->enableAccessControl();
+
+            echo json_encode($agent);
+
+
+
+        });
+
+        $app->hook('entity(Agent).canUser(modify)', function($user, &$result) use ($app, $self) {
+            $result = true;
         });
 
 

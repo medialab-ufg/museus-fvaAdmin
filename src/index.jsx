@@ -20,6 +20,7 @@ class Index extends React.Component {
 
         this.fetchMuseus = this.fetchMuseus.bind(this);
         this.updateState = this.updateState.bind(this);
+        this.updateStateAgent = this.updateStateAgent.bind(this);
         this.filterMuseums = this.filterMuseums.bind(this);
         this.getFvaYearsAvailable = this.getFvaYearsAvailable.bind(this);
     }
@@ -113,7 +114,7 @@ class Index extends React.Component {
     //retorna os agentes como rascunho
     componentDidMount() {
         $.ajax({
-            url: MapasCulturais.createUrl('panel', 'getAgentsDraft'),
+            url: MapasCulturais.createUrl('panel', 'agentsDraft'),
             type: 'GET',
             dataType:'json',
         }).done(function(data) {
@@ -126,7 +127,11 @@ class Index extends React.Component {
     //update o estado da aplicação
     updateState() {
         this.fetchMuseus();
-        this.getFvaYearsAvailable();
+        //this.getFvaYearsAvailable();
+    }
+
+    updateStateAgent() {
+        this.componentDidMount();
     }
 
     //filtra os museus que responderam o FVA para gerar o relatório em planilha
@@ -147,6 +152,7 @@ class Index extends React.Component {
                     respostas={this._qtdRespostas}
                     percentual={this._percentualRespostas}
                     parentHandler={this.updateState}
+                    parentHandlerAgent={this.updateStateAgent}
                     filteredMuseums={this._filteredMuseums}
                 />
             );
