@@ -28,36 +28,29 @@ class Index extends React.Component {
     }
 
     fetchMuseus() {
-        const endpointURL = MapasCulturais.baseURL + 'api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod';
-        //const endpointURL = 'http://museus.mapas.local:8090/api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod';
-        
-        fetch(endpointURL, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
-            .then(response => {
-                response.json()
-                    .then(data => {
-                        const qtdRespostas = countFvasRespondidos(data);
-                        const percentualRespostas = calculatePercentual(data.length, qtdRespostas.respondidos);
-                        this._qtdRespostas = qtdRespostas;
-                        this._percentualRespostas = percentualRespostas;
-                        this.setState({museusData: data});
-                    });
-            });
+        $.ajax({
+            url: MapasCulturais.createUrl('api', 'space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod'),
+            type: 'GET',
+            dataType:'json',
+        }).done(function(data) {
+            const qtdRespostas = countFvasRespondidos(data);
+            const percentualRespostas = calculatePercentual(data.length, qtdRespostas.respondidos);
+            this._qtdRespostas = qtdRespostas;
+            this._percentualRespostas = percentualRespostas;
+            this.setState({museusData: data});
+        }.bind(this));
+
 
         /**
          * Contabiliza o número de museus que já responderam o FVA
-         * @param {JSON} museusJson 
+         * @param {JSON} museusJson
          * @return {OBJ}
          */
         function countFvasRespondidos(museusJson) {
             const totalMuseus = museusJson.length;
             let respondidos = 0;
             let naoRespondidos = 0;
-            
+
             _.each(museusJson, function(value, key) {
                 _.each(value, function(value, key) {
                     if(key === 'fva2018') {
@@ -67,17 +60,17 @@ class Index extends React.Component {
                     }
                 });
             });
-            
+
             naoRespondidos = totalMuseus - respondidos;
-            
+
             return{respondidos, naoRespondidos};
         }
 
         /**
          * Contabiliza o percentual de museus que responderam o FVA
          * @param {INT} totalMuseus
-         * @param {INT} totalMuseusResponderam 
-         * @return {INT} 
+         * @param {INT} totalMuseusResponderam
+         * @return {INT}
          */
         function calculatePercentual(totalMuseus, totalMuseusResponderam) {
             const percentualRespondido = _.round(totalMuseusResponderam / totalMuseus * 100, 2);
@@ -125,10 +118,10 @@ class Index extends React.Component {
     render() {
         if(this.state.museusData !== null) {
             this.filterMuseums();
-            
+
             return(
-                <AdminPanel 
-                    museus={this.state.museusData} 
+                <AdminPanel
+                    museus={this.state.museusData}
                     respostas={this._qtdRespostas}
                     percentual={this._percentualRespostas}
                     parentHandler={this.updateState}
