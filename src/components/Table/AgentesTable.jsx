@@ -2,7 +2,7 @@
 import React from'react';
 import ReactTable from'react-table';
 import'react-table/react-table.css';
-import DeleteButton from'./DeleteButton.jsx';
+import PublicarButton from'./PublicarButton.jsx';
 
 export default class AgentesTable extends React.Component {
 
@@ -36,6 +36,20 @@ export default class AgentesTable extends React.Component {
                     onChange={event => onChange(event.target.value)}
                 />
 
+        }, {
+            Header: 'Publicar',
+            filterable: false,
+            accessor: 'status',
+            getProps: () => {
+                return{
+                    style: {
+                        textAlign: 'center'
+                    }
+                };
+            },
+            Cell: props => <span><PublicarButton agentId={props.original.id} parentHandler={handler}/></span>,
+            //Cell: props => <span>{props.row.fva2018 !== null ? <DeleteButton museumId={props.original.id} parentHandler={handler}/>: 'não'}</span>,
+            width: 100
         }];
 
         return(
