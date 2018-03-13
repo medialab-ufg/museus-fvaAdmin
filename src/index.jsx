@@ -29,7 +29,7 @@ class Index extends React.Component {
 
     fetchMuseus() {
         $.ajax({
-            url: MapasCulturais.createUrl('api', 'space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod'),
+            url: MapasCulturais.baseURL + 'api/space/find/?@select=name,fva2018,emailPublico,En_Estado,En_Municipio,telefonePublico,mus_cod',
             type: 'GET',
             dataType:'json',
         }).done(function(data) {
