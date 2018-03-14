@@ -71,7 +71,7 @@ class Plugin extends \MapasCulturais\Plugin {
         $app->hook('GET(panel.getYearsAvailable)', function() use($app, $self){
             $fvaEntity = $app->repo('SubsiteMeta');
 
-            echo json_encode($fvaEntity->yearsAvailable);die;
+            //echo json_encode($fvaEntity->yearsAvailable);die;
         });
 
 
