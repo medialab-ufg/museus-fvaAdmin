@@ -122,7 +122,8 @@ class Plugin extends \MapasCulturais\Plugin {
             ->setCellValue('N1', 'Observações Sobre Visitação')
             ->setCellValue('O1', 'Meios Pelos Quais Soube do FVA')
             ->setCellValue('P1', 'Outras Mídias FVA')
-            ->setCellValue('Q1', 'Opinião Sobre o Questionário FVA');
+            ->setCellValue('Q1', 'Opinião Sobre o Questionário FVA')
+            ->setCellValue('R1', 'Data de Resposta');
 
             // Preenche a planilha com os dados
             $self->writeSheetLines($museusRelatorio, $objPHPExcel, $self);
@@ -187,6 +188,12 @@ class Plugin extends \MapasCulturais\Plugin {
         foreach($museus as $m) {
             $fva = json_decode($m->fva2018);
 
+            if(!isset($fva->date)){
+                $fva->date = '';
+            }else{
+                $fva->date = \PHPExcel_Shared_Date::PHPToExcel($fva->date);
+            }
+
             $objPHPExcel->setActiveSheetIndex(0)
                         ->setCellValue('A' . (string)$line, $m->name)
                         ->setCellValue('B' . (string)$line, $m->mus_cod)
@@ -204,8 +211,11 @@ class Plugin extends \MapasCulturais\Plugin {
                         ->setCellValue('N' . (string)$line, $fva->visitacao->observacoes->answer !== null ? $fva->visitacao->observacoes->answer : '')
                         ->setCellValue('O' . (string)$line, $self->assertBlockAnswers($fva->avaliacao->midias))
                         ->setCellValue('P' . (string)$line, $fva->avaliacao->midiasOutros->answer !== false ? $fva->avaliacao->midiasOutros->text : '')
-                        ->setCellValue('Q' . (string)$line, $fva->avaliacao->opiniao->text !== null ? $fva->avaliacao->opiniao->text : '');
+                        ->setCellValue('Q' . (string)$line, $fva->avaliacao->opiniao->text !== null ? $fva->avaliacao->opiniao->text : '')
+                        ->setCellValue('R' . (string)$line, $fva->date !== null ? $fva->date : '');
 
+            $objPHPExcel->getActiveSheet()->getStyle('R' . (string)$line)->getNumberFormat()->setFormatCode(\PHPExcel_Style_NumberFormat::FORMAT_DATE_XLSX22);
+            $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setWidth(20);
 
             $line++;
         }
